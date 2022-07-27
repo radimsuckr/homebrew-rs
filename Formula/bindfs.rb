@@ -1,3 +1,30 @@
+class MacfuseRequirement < Requirement
+  fatal true
+
+  satisfy(build_env: false) { self.class.binary_macfuse_installed? }
+
+  def self.binary_macfuse_installed?
+    File.exist?("/usr/local/include/fuse/fuse.h") &&
+      !File.symlink?("/usr/local/include/fuse")
+  end
+
+  env do
+    ENV.append_path "PKG_CONFIG_PATH",
+                    "/usr/local/lib/pkgconfig:#{HOMEBREW_PREFIX}/lib/pkgconfig:"\
+                    "#{HOMEBREW_PREFIX}/opt/openssl@1.1/lib/pkgconfig"
+    ENV.append_path "BORG_OPENSSL_PREFIX", "#{HOMEBREW_PREFIX}/opt/openssl@1.1/"
+
+    unless HOMEBREW_PREFIX.to_s == "/usr/local"
+      ENV.append_path "HOMEBREW_LIBRARY_PATHS", "/usr/local/lib"
+      ENV.append_path "HOMEBREW_INCLUDE_PATHS", "/usr/local/include/fuse"
+    end
+  end
+
+  def message
+    "macFUSE is required to build bindfs. Please run `brew install --cask macfuse` first."
+  end
+end
+
 class Bindfs < Formula
   desc "FUSE file system for mounting to another location"
   homepage "https://bindfs.org/"
