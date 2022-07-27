@@ -21,7 +21,7 @@ class Bindfs < Formula
       --disable-dependency-tracking
     ]
 
-    system "./configure", *args
+    system "./configure"
 
     system "make", "install"
   end
