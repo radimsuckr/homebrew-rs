@@ -19,7 +19,7 @@ class Bindfs < Formula
   end
 
   depends_on "pkg-config" => :build
-  depends_on "libfuse"
+  # depends_on "libfuse"
   # depends_on :linux # on macOS, requires closed-source macFUSE
 
   def install
